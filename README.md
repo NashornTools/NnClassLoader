@@ -1,4 +1,4 @@
-# NnClassLoader (Nashorn ClassLoader)
+# NnClassLoader (Nashorn ClassLoader)[![Build Status](https://travis-ci.org/NashornTools/NnClassLoader.svg?branch=master)](https://travis-ci.org/NashornTools/NnClassLoader)
 Class loading facility for Nashorn scripts. Allows to define Java dependencies directly in the Nashorn script.
 
 Example of usage from JS REPL without having any local jars or scripts:
