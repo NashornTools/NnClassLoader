@@ -1,5 +1,5 @@
 /*
-   Copyright 2016 Sergi Valdykin (https://github.com/svladykin) 
+   Copyright 2016 Sergi Vladykin (https://github.com/svladykin) 
 
    Version 0.2
 
