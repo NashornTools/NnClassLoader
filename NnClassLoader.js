@@ -1,7 +1,7 @@
 /*
    Copyright 2016 Sergi Vladykin (https://github.com/svladykin) 
 
-   Version 0.2
+   Version 0.3
 
    The latest version can be found at https://github.com/NashornTools
 
@@ -35,6 +35,10 @@ function loadType(className, ldr) {
 	return StaticClass.forClass(cls);
 }
 
+function toURL(f) {
+	return f.toURI().toURL();
+}
+
 function scanDirForJars(f, filter, urls) {
 	if (!f.exists())
 		return;
@@ -45,7 +49,7 @@ function scanDirForJars(f, filter, urls) {
 		}
 	}
 	else if (f.isFile() && f.getName().endsWith('.jar') && filter(f))
-		urls.add(f.toURI().toURL());
+		urls.add(toURL(f));
 }
 
 function collectAllJarUrls(cfg) {
@@ -60,8 +64,12 @@ function collectAllJarUrls(cfg) {
 	}
 
 	if (isObject(cfg.jars)) {
-		for each (var jar in cfg.jars)
-			urls.add(new File(jar).toURI().toURL());
+		for each (var jar in cfg.jars) {
+			var f = new File(jar);
+
+			if (f.isFile())
+				urls.add(toURL(f));
+		}
 	}
 
 	if (isObject(cfg.dirs)) {
@@ -69,6 +77,15 @@ function collectAllJarUrls(cfg) {
 
 		for each (var dir in cfg.dirs)
 			scanDirForJars(new File(dir), filter, urls);
+	}
+
+	if (isObject(cfg.classes)) {
+		for each (var dir in cfg.classes) {
+			var f = new File(dir);
+
+			if (f.isDirectory())
+				urls.add(toURL(f));
+		}
 	}
 
 	return urls.toArray(new UrlArray(0));

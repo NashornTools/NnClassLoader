@@ -7,12 +7,16 @@ var L = new NnClassLoader({
 	],
 
 	jars: [
-		'/some/path/to/some.jar',
+		'my-test.jar',
 		'/some/path/to/some-else.jar'
 	],
 
 	dirs: [
 		'dir1', 'dir2/', 'dir3-bad'
+	],
+
+	classes: [
+		'classes1', 'classes2-bad'
 	],
 
 	filter: function(f) {
@@ -30,14 +34,15 @@ var expected = [
 	'http://www.example.com/my.jar',
 	'http://www.example.ru/my-ru.jar',
 
-	url('/some/path/to/some.jar'),
-	url('/some/path/to/some-else.jar'),
+	url('my-test.jar'),
 
-	
 	url('dir1/my-fake-test1.jar'),
 	url('dir1/my-fake-test2.jar'),
 	url('dir1/myJars/my-fake-4.jar'),
-	url('dir2/my-fake-8.jar')
+	url('dir2/my-fake-8.jar'),
+
+	url('classes1'),
+	url('classes2-bad'),
 ];
 
 if (expected.length !== L.urls.length)
