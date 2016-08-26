@@ -5,4 +5,4 @@ jdk:
 
 before_script: cd test/
 
-script: jjs test-urls.js
+script: jjs test-all.js
