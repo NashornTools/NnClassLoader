@@ -1,12 +1,13 @@
 var tests = [
-	'test-urls.js'
+	'test-urls.js',
+	'test-loading.js',
 ];
 
 
 function runTest(test) {
 	print('>>>>>>>>>>>>>> Test begin: ' + test + ' >>>>>>>>>>>>>>>');
 	load(test);
-	print('>>>>>>>>>>>>>> Test end: ' + test + ' >>>>>>>>>>>>>>>');
+	print('<<<<<<<<<<<<<< Test end:   ' + test + ' <<<<<<<<<<<<<<<');
 }
 
 
