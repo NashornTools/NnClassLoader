@@ -1,0 +1,8 @@
+language: java
+
+jdk:
+  - openjdk8
+
+before_script: cd test/
+
+script: jjs test-urls.js
