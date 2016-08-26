@@ -1,7 +1,7 @@
 /*
    Copyright 2016 Sergi Valdykin (https://github.com/svladykin) 
 
-   Version 0.1
+   Version 0.2
 
    The latest version can be found at https://github.com/NashornTools
 
@@ -35,6 +35,19 @@ function loadType(className, ldr) {
 	return StaticClass.forClass(cls);
 }
 
+function scanDirForJars(f, filter, urls) {
+	if (!f.exists())
+		return;
+	if (f.isDirectory()) {
+		if (filter(f)) {
+			for each (var x in f.listFiles())
+				scanDirForJars(x, filter, urls);
+		}
+	}
+	else if (f.isFile() && f.getName().endsWith('.jar') && filter(f))
+		urls.add(f.toURI().toURL());
+}
+
 function collectAllJarUrls(cfg) {
 	if (!isObject(cfg)) 
 		throw "Class loader config is not provided.\nFor example: new NnClassLoader({jars:['/myapp/bla.jar'], urls:['http://.../bla.jar']})";
@@ -52,7 +65,10 @@ function collectAllJarUrls(cfg) {
 	}
 
 	if (isObject(cfg.dirs)) {
-		// TODO cfg.filter
+		var filter = isDefined(cfg.filter) ? cfg.filter : function(f) {return true;};
+
+		for each (var dir in cfg.dirs)
+			scanDirForJars(new File(dir), filter, urls);
 	}
 
 	return urls.toArray(new UrlArray(0));
