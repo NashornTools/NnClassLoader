@@ -45,17 +45,19 @@ var expected = [
 	url('classes2-bad'),
 ];
 
-if (expected.length !== L.urls.length)
-	throw "Wrong length: " + L.urls;
+var urls = L.getUrls();
+
+if (expected.length !== urls.length)
+	throw "Wrong length: " + urls;
 
 for each (var url in expected) {
-	if (L.urls.indexOf(url) === -1)
-		throw "Not found '" + url + "' in " + L.urls;		
+	if (urls.indexOf(url) === -1)
+		throw "Not found '" + url + "' in " + urls;
 }
 
 
 print('--------');
-for each (var url in L.urls)
+for each (var url in urls)
 	print(url);
 print('--------');
 

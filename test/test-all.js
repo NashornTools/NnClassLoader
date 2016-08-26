@@ -1,8 +1,10 @@
+print("Running tests...")
+print(__DIR__, __FILE__, __LINE__);
+
 var tests = [
 	'test-urls.js',
 	'test-loading.js',
 ];
-
 
 function runTest(test) {
 	print('>>>>>>>>>>>>>> Test begin: ' + test + ' >>>>>>>>>>>>>>>');

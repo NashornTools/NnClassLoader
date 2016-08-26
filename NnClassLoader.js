@@ -1,7 +1,7 @@
 /*
    Copyright 2016 Sergi Vladykin (https://github.com/svladykin) 
 
-   Version 0.3
+   Version 0.4
 
    The latest version can be found at https://github.com/NashornTools
 
@@ -101,9 +101,17 @@ return function(cfg) {
 		return loadType(className, ldr);
 	}
 
-	this.urls = [];
+	this.getUrls = function() {
+		var res = [];
 
-	for each (var url in jarUrls)
-		this.urls.push(url.toString());
+		for each (var url in jarUrls)
+			res.push(url.toString());
+
+		return res;
+	}
+
+	this.getJavaClassLoader = function() {
+		return ldr;
+	}
 }	
 })();
