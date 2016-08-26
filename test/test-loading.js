@@ -16,7 +16,7 @@ var arr = ['BMW','Volvo','Lexus'];
 
 var i = 0;
 
-
+print('--------');
 while (rs.next()) {
 	var x = rs.getString(1);
 
@@ -27,6 +27,6 @@ while (rs.next()) {
 
 	print(x);
 }
+print('--------');
 
-print('================');
 print('OK');
