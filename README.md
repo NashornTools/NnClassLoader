@@ -48,12 +48,12 @@ Lexus
 
 `NnClassLoader` constructor accepts single object with any of the following configuration properties:
 
-- `urls` - JS array of URL strings
-- `jars` - JS array of Jar file path strings
-- `dirs` - JS array of directory path strings to be recursively scanned in order to find all the Jar files there
-- `filter` - JS function which accepts single argument of type `java.io.File` and returns boolean; makes sense only if `dirs` is defined and allows to filter scanned files and directories
-- `classes` - JS array of directory path strings to be added to classpath as is
-- `maven` - JS array of Maven dependencies to be loaded
+- `urls` - JS array of URL strings (may refer to remote Jars as well, e.g. `{urls: ['http://example.com/bla.jar']}`)
+- `jars` - JS array of Jar file path strings (`{jars: ['libs/bla.jar']}`)
+- `dirs` - JS array of directory path strings to be recursively scanned in order to find all the Jar files there (`{dirs: ['libs']}`)
+- `filter` - JS function which accepts single argument of type `java.io.File` and returns boolean; makes sense only if `dirs` is defined and allows to filter scanned files and directories (`{dirs: ['libs'], filter: function(f) {return f.isDirectory() || f.getName().endsWith('.jar')}}`)
+- `classes` - JS array of directory path strings to be added to classpath as is (`{classes:['target/classes']}`)
+- `maven` - JS array of Maven dependencies to be loaded (`{maven: ['org.apache.ignite:ignite-core:1.7.0']}`)
 - `parent` - parent Java class loader (must be of `java.lang.ClassLoader` type)
 
 
