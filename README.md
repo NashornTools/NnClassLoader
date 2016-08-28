@@ -1,7 +1,7 @@
 # NnClassLoader (Nashorn ClassLoader)[![Build Status](https://travis-ci.org/NashornTools/NnClassLoader.svg?branch=master)](https://travis-ci.org/NashornTools/NnClassLoader)
-Class loading facility for Nashorn scripts. Allows to define Java dependencies directly in the Nashorn script.
+Simple and convenient Java ClassLoader for Nashorn scripts. Allows to define Java dependencies (jars, class directories, URLs, Maven or any combination of them) directly in the Nashorn script or right in `jjs` REPL.
 
-Example of usage from JS REPL without having any local jars or scripts:
+Example of usage from `jjs` REPL without having any local jars or scripts and even without manual Maven installation:
 
 ```bash
 jjs> // Load script with NnClassLoader from GitHub.
