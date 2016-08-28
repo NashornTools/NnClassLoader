@@ -44,6 +44,29 @@ Lexus
 
 ```
 
+## Supported configuration properties
+
+`NnClassLoader` constructor accepts single object with any of the following configuration properties:
+
+- `urls` - JS array of URL strings
+- `jars` - JS array of Jar file path strings
+- `dirs` - JS array of directory path strings to be recursively scanned in order to find all the Jar files there
+- `filter` - JS function which accepts single argument of type `java.io.File` and returns boolean; makes sense only if `dirs` is defined and allows to filter scanned files and directories
+- `classes` - JS array of directory path strings to be added to classpath as is
+- `maven` - JS array of Maven dependencies to be loaded
+
+
+## API methods of `NnClassLoader` instances
+
+- `type(className)` - loads the requested type by name the same way as `Java.type('...')` does
+- `getUrls()` - returnes JS array of actual URLs used by this class loader instance
+- `getJavaClassLoader()` - returns internal `java.net.URLClassLoader` instance which actually does the class loading
+
+
+
+
+
+
 
 
 
