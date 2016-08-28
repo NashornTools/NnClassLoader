@@ -20,6 +20,7 @@ var File = java.io.File;
 var Files = java.nio.file.Files;
 var SCO = java.nio.file.StandardCopyOption;
 var System = java.lang.System;
+var Thread = java.lang.Thread;
 
 
 var DEBUG = java.lang.Boolean.getBoolean('NnClassLoader.debug');
@@ -153,7 +154,7 @@ function bytesToHex(b) {
 }
 
 function withOkLock(fun) {
-	var ok = file(path(WORK_DIR, ".ok"));
+	var ok = file(path(WORK_DIR, ".ok-" + MAVEN_VERSION));
 
 	if (ok.exists())
 		return;
@@ -165,14 +166,25 @@ function withOkLock(fun) {
 	if (!workDir.exists())
 		throw "Failed to create directory: " + WORK_DIR;
 
-	var lock = file(path(WORK_DIR, ".lock"));
-	lock.createNewFile();
+	var lockFile = file(path(WORK_DIR, ".lock"));
 
 	var RandomAccessFile = java.io.RandomAccessFile;
-	var raf = new RandomAccessFile(lock, "rw");
+	var OverlappingFileLockException = java.nio.channels.OverlappingFileLockException;
+
+	var raf = new RandomAccessFile(lockFile, "rw");
 
 	try {
-		var lock = raf.getChannel().lock();
+		var lock = null;
+
+		do {
+			try {
+				lock = raf.getChannel().lock();
+			}
+			catch(e if e instanceof OverlappingFileLockException) {
+				Thread.sleep(50);
+			}
+		}
+		while (lock === null);
 
 		try {
 			if (ok.exists())
@@ -183,8 +195,7 @@ function withOkLock(fun) {
 			ok.createNewFile();
 		}
 		finally {
-			if (lock != null)
-				lock.release();
+			lock.release();
 		}
 	}
 	finally {
@@ -310,7 +321,7 @@ function debugPrintStream() {
 }
 
 function setContextClassLoader(ldr) {
-	var th = java.lang.Thread.currentThread();
+	var th = Thread.currentThread();
 
 	var oldLdr = th.getContextClassLoader();
 
