@@ -339,39 +339,42 @@ function collectMavenDependencies(cfg, urls) {
 		// Temporary set context class loader to Maven.
 		var oldLdr = setContextClassLoader(L.getJavaClassLoader());
 
-		var MavenCli = L.type('org.apache.maven.cli.MavenCli');
-
-		var cli = new MavenCli();
-
-		var cpFile = Files.createTempFile('cp-', '.txt').toFile();
-
 		try {
-			var pomFile = generatePomXmlFile(cfg);
+			var MavenCli = L.type('org.apache.maven.cli.MavenCli');
+
+			var cli = new MavenCli();
+
+			var cpFile = Files.createTempFile('cp-', '.txt').toFile();
 
 			try {
-				var printStream = debugPrintStream();
+				var pomFile = generatePomXmlFile(cfg);
 
-				var mvnArgs = ['-f', pomFile.getCanonicalPath(), "-Dmdep.outputFile=" + cpFile.getCanonicalPath(),
-					'dependency:go-offline', 'dependency:build-classpath', 'verify'];
+				try {
+					var printStream = debugPrintStream();
 
-				if (DEBUG)
-					mvnArgs = ['--debug', '--errors'].concat(mvnArgs);
+					var mvnArgs = ['-f', pomFile.getCanonicalPath(), "-Dmdep.outputFile=" + cpFile.getCanonicalPath(),
+						'dependency:go-offline', 'dependency:build-classpath', 'verify'];
 
-				var exitCode = cli.doMain(mvnArgs, mvnTmp.getCanonicalPath(), printStream, printStream);
+					if (DEBUG)
+						mvnArgs = ['--debug', '--errors'].concat(mvnArgs);
 
-				if (exitCode !== 0)
-					throw "Exit code of maven " + exitCode;
+					var exitCode = cli.doMain(mvnArgs, mvnTmp.getCanonicalPath(), printStream, printStream);
 
-				setContextClassLoader(oldLdr)
+					if (exitCode !== 0)
+						throw "Exit code of maven " + exitCode;
 
-				cp = readTextFile(cpFile.getCanonicalPath(), 'UTF-8');
+					cp = readTextFile(cpFile.getCanonicalPath(), 'UTF-8');
+				}
+				finally {
+					rm(pomFile);
+				}
 			}
 			finally {
-				rm(pomFile);
+				rm(cpFile);
 			}
 		}
 		finally {
-			rm(cpFile);
+			setContextClassLoader(oldLdr);
 		}
 	}
 	finally {
