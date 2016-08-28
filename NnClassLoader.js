@@ -284,7 +284,7 @@ function generatePomXmlFile(cfg) {
 	debug("Generating pom.xml:\n" + pomXml);
 
 	var pom = Files.createTempFile('pom-', '.xml').toAbsolutePath();
-	Files.write(pom, pomXml.getBytes('UTF-8'));
+	Files.write(pom, pomXml.toString().getBytes('UTF-8'));
 
 	return pom.toFile();
 }
