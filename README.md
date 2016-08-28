@@ -23,7 +23,7 @@ jjs>
 jjs> // Import class similarly to Java.type('com.example.MyType').
 jjs> var BasicDataSource = L.type('org.apache.commons.dbcp2.BasicDataSource');
 jjs>
-jjs> // Work with inported classes as usual.
+jjs> // Work with imported classes as usual.
 jjs> var ds = new BasicDataSource();
 jjs>
 jjs> ds.setDriverClassName('org.h2.Driver');
@@ -54,13 +54,14 @@ Lexus
 - `filter` - JS function which accepts single argument of type `java.io.File` and returns boolean; makes sense only if `dirs` is defined and allows to filter scanned files and directories
 - `classes` - JS array of directory path strings to be added to classpath as is
 - `maven` - JS array of Maven dependencies to be loaded
+- `parent` - parent Java class loader (must be of `java.lang.ClassLoader` type)
 
 
 ## API methods of `NnClassLoader` instances
 
 - `type(className)` - loads the requested type by name the same way as `Java.type('...')` does
-- `getUrls()` - returnes JS array of actual URLs used by this class loader instance
-- `getJavaClassLoader()` - returns internal `java.net.URLClassLoader` instance which actually does the class loading
+- `getUrls()` - returnes JS array of actual URL strings used by this class loader instance
+- `getJavaClassLoader()` - returns internal `java.net.URLClassLoader` instance which actually does the class loading (it is often useful to set it as a thread context class loader by `java.lang.Thread.setContextClassLoader` method)
 
 
 
