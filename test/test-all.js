@@ -9,7 +9,7 @@ var tests = [
 
 function runTest(test) {
 	print('>>>>>>>>>>>>>> Test begin: ' + test + ' >>>>>>>>>>>>>>>');
-	load(test);
+	(function() { load(test);})();
 	print('<<<<<<<<<<<<<< Test end:   ' + test + ' <<<<<<<<<<<<<<<');
 }
 
