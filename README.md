@@ -1,15 +1,37 @@
 # NnClassLoader (Nashorn ClassLoader)[![Build Status](https://travis-ci.org/NashornTools/NnClassLoader.svg?branch=master)](https://travis-ci.org/NashornTools/NnClassLoader)
-Class loading facility for Nashorn scripts. Allows to define Java dependencies directly in the Nashorn script.
+Simple and convenient Java ClassLoader for Nashorn scripts. Allows to define Java dependencies (jars, class directories, URLs, Maven or any combination of them) directly in the Nashorn script or right in `jjs` REPL.
 
-Example of usage from JS REPL without having any local jars or scripts:
+Example of usage from `jjs` REPL without having any local jars or scripts and even without manual Maven installation:
 
-```javascript
-
+```bash
+jjs> // Load script with NnClassLoader from GitHub.
 jjs> load('https://raw.githubusercontent.com/NashornTools/NnClassLoader/master/NnClassLoader.js');
-jjs> var L = new NnClassLoader({urls:['http://repo1.maven.org/maven2/com/h2database/h2/1.4.192/h2-1.4.192.jar']});
-jjs> var Driver = L.type('org.h2.Driver');
-jjs> var c = Driver.load().connect('jdbc:h2:mem:',null);
+jjs>
+jjs> // Define Maven dependencies for the script.
+jjs> var MAVEN_DEPENDENCIES = ['com.h2database:h2:1.4.192', 'org.apache.commons:commons-dbcp2:2.1.1'];
+jjs>
+jjs> // Create class loader instance.
+jjs> var L = new NnClassLoader({ maven: MAVEN_DEPENDENCIES });
+jjs>
+jjs> // Look at the actual list of jars resolved by the class loader.
+jjs> for each(var url in L.getUrls()) print(url);
+file:/Users/xxx/.m2/repository/com/h2database/h2/1.4.192/h2-1.4.192.jar
+file:/Users/xxx/.m2/repository/org/apache/commons/commons-pool2/2.4.2/commons-pool2-2.4.2.jar
+file:/Users/xxx/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar
+file:/Users/xxx/.m2/repository/org/apache/commons/commons-dbcp2/2.1.1/commons-dbcp2-2.1.1.jar
+jjs>
+jjs> // Import class similarly to Java.type('com.example.MyType').
+jjs> var BasicDataSource = L.type('org.apache.commons.dbcp2.BasicDataSource');
+jjs>
+jjs> // Work with inported classes as usual.
+jjs> var ds = new BasicDataSource();
+jjs>
+jjs> ds.setDriverClassName('org.h2.Driver');
+jjs> ds.setUrl('jdbc:h2:mem:MyTestDb');
+jjs>
+jjs> var c = ds.getConnection();
 jjs> var s = c.createStatement();
+jjs>
 jjs> s.executeUpdate('CREATE TABLE cars(name VARCHAR)');
 0
 jjs> s.executeUpdate("INSERT INTO cars VALUES ('BMW'),('Volvo'),('Lexus')");
@@ -21,6 +43,29 @@ Volvo
 Lexus
 
 ```
+
+## Supported configuration properties
+
+`NnClassLoader` constructor accepts single object with any of the following configuration properties:
+
+- `urls` - JS array of URL strings
+- `jars` - JS array of Jar file path strings
+- `dirs` - JS array of directory path strings to be recursively scanned in order to find all the Jar files there
+- `filter` - JS function which accepts single argument of type `java.io.File` and returns boolean; makes sense only if `dirs` is defined and allows to filter scanned files and directories
+- `classes` - JS array of directory path strings to be added to classpath as is
+- `maven` - JS array of Maven dependencies to be loaded
+
+
+## API methods of `NnClassLoader` instances
+
+- `type(className)` - loads the requested type by name the same way as `Java.type('...')` does
+- `getUrls()` - returnes JS array of actual URLs used by this class loader instance
+- `getJavaClassLoader()` - returns internal `java.net.URLClassLoader` instance which actually does the class loading
+
+
+
+
+
 
 
 
