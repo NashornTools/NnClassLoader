@@ -64,7 +64,7 @@ Lexus
 - `getJavaClassLoader()` - returns internal `java.net.URLClassLoader` instance which actually does the class loading (it is often useful to set it as a thread context class loader by `java.lang.Thread.setContextClassLoader` method)
 
 
-![Nashorn Tools](https://cdn.rawgit.com/NashornTools/logo/master/rhino.svg)
+[![Nashorn Tools](https://cdn.rawgit.com/NashornTools/logo/master/rhino.svg)](https://github.com/NashornTools)
 
 
 
