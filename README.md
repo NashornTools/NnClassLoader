@@ -5,7 +5,7 @@ Example of usage from `jjs` REPL without having any local jars or scripts and ev
 
 ```bash
 jjs> // Load script with NnClassLoader from GitHub.
-jjs> load('https://raw.githubusercontent.com/NashornTools/NnClassLoader/master/NnClassLoader.js');
+jjs> load('https://cdn.rawgit.com/NashornTools/NnClassLoader/master/NnClassLoader.js');
 jjs>
 jjs> // Define Maven dependencies for the script.
 jjs> var MAVEN_DEPENDENCIES = ['com.h2database:h2:1.4.192', 'org.apache.commons:commons-dbcp2:2.1.1'];
@@ -64,7 +64,7 @@ Lexus
 - `getJavaClassLoader()` - returns internal `java.net.URLClassLoader` instance which actually does the class loading (it is often useful to set it as a thread context class loader by `java.lang.Thread.setContextClassLoader` method)
 
 
-
+![Nashorn Tools](https://cdn.rawgit.com/NashornTools/logo/master/rhino.svg)
 
 
 
