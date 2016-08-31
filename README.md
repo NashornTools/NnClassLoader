@@ -1,11 +1,11 @@
-# NnClassLoader (Nashorn ClassLoader)[![Build Status](https://travis-ci.org/NashornTools/NnClassLoader.svg?branch=master)](https://travis-ci.org/NashornTools/NnClassLoader)
+# NnClassLoader (Nashorn ClassLoader)[![Build Status](https://travis-ci.org/NashornTools/NnClassLoader.svg?branch=master)](https://travis-ci.org/NashornTools/NnClassLoader) [![License](https://img.shields.io/badge/license-Apache_2.0-blue.svg)](https://github.com/NashornTools/NnClassLoader/blob/master/LICENSE)
 Simple and convenient Java ClassLoader for Nashorn scripts. Allows to define Java dependencies (jars, class directories, URLs, Maven or any combination of them) directly in the Nashorn script or right in `jjs` REPL.
 
 Example of usage from `jjs` REPL without having any local jars or scripts and even without manual Maven installation:
 
 ```bash
 jjs> // Load script with NnClassLoader from GitHub.
-jjs> load('https://raw.githubusercontent.com/NashornTools/NnClassLoader/master/NnClassLoader.js');
+jjs> load('https://cdn.rawgit.com/NashornTools/NnClassLoader/master/NnClassLoader.js');
 jjs>
 jjs> // Define Maven dependencies for the script.
 jjs> var MAVEN_DEPENDENCIES = ['com.h2database:h2:1.4.192', 'org.apache.commons:commons-dbcp2:2.1.1'];
@@ -64,7 +64,7 @@ Lexus
 - `getJavaClassLoader()` - returns internal `java.net.URLClassLoader` instance which actually does the class loading (it is often useful to set it as a thread context class loader by `java.lang.Thread.setContextClassLoader` method)
 
 
-
+[![Nashorn Tools](https://cdn.rawgit.com/NashornTools/logo/master/rhino.svg)](https://github.com/NashornTools)
 
 
 
