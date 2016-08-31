@@ -2,28 +2,28 @@ var Thread = java.lang.Thread;
 var File = java.io.File;
 var RandomAccessFile = java.io.RandomAccessFile;
 var OverlappingFileLockException = java.nio.channels.OverlappingFileLockException;
-var MapMode = java.nio.channels.FileChannel.MapMode;
+
+// !!! rm /tmp/state
 
 var stateFile = new File("/tmp/state");
 
-stateFile.createNewFile();
+var created = stateFile.createNewFile();
 
-var stateRaf = new RandomAccessFile(stateFile, "rw");
-var buf = stateRaf.getChannel().map(MapMode.READ_WRITE, 0, 24);
+if (created)  // Write initial sequence.
+	writeAndClose(new RandomAccessFile(stateFile, "rw"), 1, 2, 3);
 
-function put(idx, v) {
-	buf.putLong(idx * 8, v);
+function writeAndClose(stateRaf, min, mid, max) {
+	stateRaf.seek(0);
+
+	stateRaf.writeLong(min);
+	stateRaf.writeLong(mid);
+	stateRaf.writeLong(max);
+
+	stateRaf.getChannel().force(true);
+
+	stateRaf.close();
 }
 
-function get(idx) {
-	return buf.getLong(idx * 8);
-}
-
-if (stateRaf.length() === 0) {
-	put(0, 1);
-	put(1, 2);
-	put(2, 3);
-}
 
 var lockFile = new File('/tmp/my_tmp_lock');
 lockFile.createNewFile();
@@ -67,18 +67,27 @@ for (var i = 0; i < THREADS; i++) {
 	futs.push(pool['submit(Runnable)'](function() {
 		for (var j = 0; j < ITERATIONS; j++)
 			withLock(function() {
-				var min = get(0);
-				var mid = get(1);
-				var max = get(2);
+				Thread.sleep(10);
+
+				var stateRaf = new RandomAccessFile(stateFile, "rw");
+
+				stateRaf.seek(0);
+
+				var min = stateRaf.readLong();
+				var mid = stateRaf.readLong();
+				var max = stateRaf.readLong();
 
 				// java.lang.System.out.println("  --> " + max + " = " + mid + " + " + min);
+
+				if (max < 3 || max > 23416728348467684)
+					throw "Error: " + max + ", " + mid + ", " + min;
 
 				// Fibonacci sequence check
 				if (max !== min + mid)
 					throw "Error: " + max + " != " + mid + " + " + min;
 
 				// Too big value - restart the sequence.
-				if (max == 23416728348467684) { 
+				if (max == 23416728348467684) {
 					min = 1;
 					mid = 2;
 					max = 3;
@@ -87,21 +96,17 @@ for (var i = 0; i < THREADS; i++) {
 					var oldMax = max;
 					var oldMid = mid;
 
-					max = max + mid;
-					mid = oldMax;
 					min = oldMid;
+					mid = oldMax;
+					max = oldMax + oldMid;
 				}
 
-				put(0, min);
-				put(1, mid);
-				put(2, max);
-
-				// buf.force();
+				writeAndClose(stateRaf, min, mid, max);
 			})
 	}));
 }
 
-for each( var fut in futs)
+for each(var fut in futs)
 	fut.get();
 
 print('OK');

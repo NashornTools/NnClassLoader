@@ -187,6 +187,10 @@ function withOkLock(fun) {
 		while (lock === null);
 
 		try {
+			// Wait a bit inside of the lock before the double checking to allow the file system to catch up.
+			// We need it because file systems have different and usually very wonky concurrent visibility guaranties.
+			Thread.sleep(50);
+
 			if (ok.exists())
 				return;
 
