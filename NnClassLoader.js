@@ -13,18 +13,7 @@
 
 var NnClassLoader = (function () {
 
-var StaticClass = Java.type('jdk.internal.dynalink.beans.StaticClass'); // TODO fix for JDK9
-var Class = java.lang.Class;
-var URL = java.net.URL;
-var File = java.io.File;
-var Files = java.nio.file.Files;
-var SCO = java.nio.file.StandardCopyOption;
-var System = java.lang.System;
-var Thread = java.lang.Thread;
-
-
 var DEBUG = java.lang.Boolean.getBoolean('NnClassLoader.debug');
-
 
 var MAVEN_VERSION = '3.3.9';
 var MAVEN_MD5 = 'e7ebd0b8d6811b42a5dad91fb27fe9b4';
@@ -34,9 +23,21 @@ var MAVERN_URLS = [
 	'https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip',
 ];
 
+var Class = java.lang.Class;
+var URL = java.net.URL;
+var File = java.io.File;
+var Files = java.nio.file.Files;
+var SCO = java.nio.file.StandardCopyOption;
+var System = java.lang.System;
+var Thread = java.lang.Thread;
+
+var JAVA_VERSION = System.getProperty("java.specification.version");
+
+var StaticClass = Java.type(JAVA_VERSION === '1.8' ? 'jdk.internal.dynalink.beans.StaticClass' : 'jdk.dynalink.beans.StaticClass');
+
 var WORK_DIR = path(System.getProperty("user.home"), '.mvn_js');
 var MVN = path(WORK_DIR, 'mvn-' + MAVEN_VERSION);
-var MVN_HOME = path(MVN, 'apache-maven-3.3.9');
+var MVN_HOME = path(MVN, 'apache-maven-' + MAVEN_VERSION);
 var MVN_LIB = path(MVN_HOME , 'lib');
 var MVN_BOOT = path(MVN_HOME, 'boot');
 
