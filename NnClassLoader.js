@@ -1,7 +1,7 @@
 /*
    Copyright 2016 Sergi Vladykin (https://github.com/svladykin) 
 
-   Version 1.0
+   Version 1.2
 
    The latest version can be found at https://github.com/NashornTools
 
