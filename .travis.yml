@@ -6,4 +6,4 @@ jdk:
 
 before_script: cd test/
 
-script: jjs -DNnClassLoader.debug=true test-all.js
+script: jjs -DNnClassLoader.debug=false test-all.js

@@ -15,12 +15,12 @@ var NnClassLoader = (function () {
 
 var DEBUG = java.lang.Boolean.getBoolean('NnClassLoader.debug');
 
-var MAVEN_VERSION = '3.3.9';
-var MAVEN_MD5 = 'e7ebd0b8d6811b42a5dad91fb27fe9b4';
+var MAVEN_VERSION = '3.5.0';
+var MAVEN_MD5 = 'c062cb57ca81615cc16500af332b93bd';
 var MAVERN_URLS = [
-	'http://www-us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip',
-	'http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip',
-	'https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip',
+	'http://www-us.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.zip',
+	'http://www-eu.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.zip',
+	'https://archive.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.zip',
 ];
 
 var Class = java.lang.Class;
