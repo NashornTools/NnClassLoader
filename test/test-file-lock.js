@@ -38,8 +38,11 @@ function withLock(fun) {
 			try {
 				lock = raf.getChannel().lock();
 			}
-			catch(e if e instanceof OverlappingFileLockException) {
-				Thread.sleep(1);
+			catch (e) {
+				if (e instanceof OverlappingFileLockException)
+					Thread.sleep(1);
+				else
+					throw e;
 			}
 		}
 		while (lock === null)
@@ -83,7 +86,7 @@ for (var i = 0; i < THREADS; i++) {
 					throw "Error: " + max + ", " + mid + ", " + min;
 
 				// Fibonacci sequence check
-				if (max !== min + mid)
+				if (max != min + mid)
 					throw "Error: " + max + " != " + mid + " + " + min;
 
 				// Too big value - restart the sequence.
