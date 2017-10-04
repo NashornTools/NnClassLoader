@@ -154,8 +154,8 @@ function bytesToHex(b) {
 	return res;
 }
 
-function withOkLock(fun) {
-	var ok = file(path(WORK_DIR, ".ok-" + MAVEN_VERSION));
+function withOkLock(fun, okFileName) {
+	var ok = file(path(WORK_DIR, okFileName));
 
 	if (ok.exists())
 		return;
@@ -336,7 +336,7 @@ function setContextClassLoader(ldr) {
 }
 
 function collectMavenDependencies(cfg, urls) {
-	withOkLock(installMaven);
+	withOkLock(installMaven, ".ok-" + MAVEN_VERSION);
 
 	var cp = null;
 
