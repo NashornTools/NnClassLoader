@@ -142,7 +142,7 @@ function md5(filePath) {
 	var md = MessageDigest.getInstance("MD5");
 	var stream = new DigestInputStream(Files.newInputStream(file(filePath).toPath()), md);
 
-	while(stream.read() != -1);
+	while (stream.read() != -1) {}
 
 	return bytesToHex(md.digest());
 }
@@ -185,8 +185,11 @@ function withOkLock(fun, okFileName) {
 			try {
 				lock = raf.getChannel().lock();
 			}
-			catch(e if e instanceof OverlappingFileLockException) {
-				Thread.sleep(50);
+			catch(e) {
+				if (e instanceof OverlappingFileLockException)
+					Thread.sleep(50);
+				else
+					throw e;
 			}
 		}
 		while (lock === null);
