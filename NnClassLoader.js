@@ -65,6 +65,11 @@ function isObject(o) { // Will return true for arrays as well.
 	return typeof(o) === 'object';
 }
 
+function forEach(obj, fun) {
+	for (var i in obj)
+		fun(obj[i])
+}
+
 function download(url, filePath) {
 	var tmpFile = file(filePath + '.tmp');
 	var input = null;
@@ -93,10 +98,9 @@ function rm(f) {
 	if (!f.exists())
 		return;
 
-	if (f.isDirectory()) {
-		for each (var c in f.listFiles())
-			rm(c);
-	}
+	if (f.isDirectory())
+		forEach(f.listFiles(), rm);
+
 	if (!f.delete())
 		throw "Failed to delete file: " + f;
 }
@@ -271,7 +275,7 @@ function parseMavenDependency(dep) {
 
 function generatePomXmlFile(cfg) {
 	var dependenciesXml = '';
-	for each(var dep in cfg.maven) {
+	forEach(cfg.maven, function (dep) {
 		var d = parseMavenDependency(dep);
 
 		dependenciesXml += '' +
@@ -280,7 +284,7 @@ function generatePomXmlFile(cfg) {
 '			<artifactId>' + d.artifactId + '</artifactId>\n' +
 '			<version>' + d.version + '</version>\n' +
 '		</dependency>\n';
-	}
+	});
 
 	var pomXml = '' +
 '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -398,10 +402,9 @@ function collectMavenDependencies(cfg, urls) {
 	}
 
 	if (cp !== null) {
-		cp = cp.trim();
-
-		for each(var jar in cp.split(File.pathSeparator))
+		forEach(cp.trim().split(File.pathSeparator), function(jar) {
 			urls.add(toURL(file(jar)));
+		});
 	}
 }
 
@@ -419,8 +422,9 @@ function scanDirForJars(f, filter, urls) {
 		return;
 	if (f.isDirectory()) {
 		if (filter(f)) {
-			for each (var x in f.listFiles())
+			forEach(f.listFiles(), function(x) {
 				scanDirForJars(x, filter, urls);
+			});
 		}
 	}
 	else if (f.isFile() && f.getName().toLowerCase().endsWith('.jar') && filter(f))
@@ -437,33 +441,35 @@ function collectAllJarUrls(cfg) {
 	var urls = new HashSet();
 
 	if (isObject(cfg.urls)) {
-		for each (var url in cfg.urls)
+		forEach(cfg.urls, function(url) {
 			urls.add(new URL(url));
+		});
 	}
 
 	if (isObject(cfg.jars)) {
-		for each (var jar in cfg.jars) {
+		forEach(cfg.jars, function(jar) {
 			var f = file(jar);
 
 			if (f.isFile())
 				urls.add(toURL(f));
-		}
+		});
 	}
 
 	if (isObject(cfg.dirs)) {
 		var filter = isDefined(cfg.filter) ? cfg.filter : function(f) {return true;};
 
-		for each (var dir in cfg.dirs)
+		forEach(cfg.dirs, function (dir) {
 			scanDirForJars(file(dir), filter, urls);
+		});
 	}
 
 	if (isObject(cfg.classes)) {
-		for each (var dir in cfg.classes) {
+		forEach(cfg.classes, function (dir) {
 			var f = file(dir);
 
 			if (f.isDirectory())
 				urls.add(toURL(f));
-		}
+		});
 	}
 
 	if (isObject(cfg.maven))
@@ -487,8 +493,9 @@ function NnClassLoader(cfg) {
 	this.getUrls = function() {
 		var res = [];
 
-		for each (var url in jarUrls)
+		forEach(jarUrls, function (url) {
 			res.push(url.toString());
+		});
 
 		return res;
 	}
