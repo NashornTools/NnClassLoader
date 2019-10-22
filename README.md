@@ -1,4 +1,7 @@
-# NnClassLoader (Nashorn ClassLoader)[![Build Status](https://travis-ci.org/NashornTools/NnClassLoader.svg?branch=master)](https://travis-ci.org/NashornTools/NnClassLoader) [![License](https://img.shields.io/badge/license-Apache_2.0-blue.svg)](https://github.com/NashornTools/NnClassLoader/blob/master/LICENSE)
+# NnClassLoader (Nashorn ClassLoader)[![Build Status](https://travis-ci.org/NashornTools/NnClassLoader.svg?branch=master)](https://travis-ci.org/NashornTools/NnClassLoader) [![License](https://img.shields.io/badge/license-Apache_2.0-blue.svg)](https://github.com/NashornTools/NnClassLoader/blob/master/LICENSE) 
+
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/) [__Oracle has depricated Nashorn JavaScript Engine__](http://openjdk.java.net/jeps/335)
+
 Simple and convenient Java ClassLoader for Nashorn scripts. Allows to define Java dependencies (jars, class directories, URLs, Maven or any combination of them) directly in the Nashorn script or right in `jjs` REPL.
 
 Example of usage from `jjs` REPL without having any local jars or scripts and even without manual Maven installation:
